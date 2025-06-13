@@ -1,0 +1,20 @@
+---
+- name: Install Nginx on remote hosts using shell
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Install Nginx on Debian/Ubuntu using shell
+      shell: |
+        apt update
+        apt install -y nginx
+      when: ansible_os_family == "Debian"
+
+    - name: Start and enable Nginx
+      shell: |
+        systemctl enable nginx
+        systemctl start nginx
+
+    - name: Check Nginx status
+      shell: systemctl status nginx
+      register: nginx_status
